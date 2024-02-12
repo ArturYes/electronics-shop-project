@@ -1,3 +1,8 @@
+import csv
+
+from config import ROOT_DIR
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -13,10 +18,32 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
         Item.all.append(self)
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        self.__name = value[:10] if len(value) > 10 else value
+
+    @classmethod
+    def instantiate_from_csv(cls, patch):
+        cls.all.clear()
+        with open(f'{ROOT_DIR + "/" + patch}', 'r', encoding='cp1251') as file:
+            csv_data = csv.DictReader(file)
+            for line in csv_data:
+                name = line['name']
+                price = float(line['price'])
+                quantity = int(line['quantity'])
+                cls(name, price, quantity)
+    @staticmethod
+    def string_to_number(string):
+        return int(float(string))
 
     def calculate_total_price(self) -> float:
         """
