@@ -33,9 +33,7 @@ def test_setter(product):
     assert product.name == 'iphone15ma'
 
 
-
-
-def test_instantiate_from_csv():
+def test_instantiate_from_csv(item1):
     Item.instantiate_from_csv(TEST_ITEM)
     assert len(Item.all) == 5
     item1 = Item.all[0]
@@ -48,3 +46,16 @@ def test_string_to_number():
     assert Item.string_to_number('5') == 5
     assert Item.string_to_number('5.0') == 5
     assert Item.string_to_number('5.5') == 5
+
+
+@pytest.fixture()
+def item1():
+    return Item("Смартфон", 10000, 20)
+
+
+def test_repr(item1):
+    assert repr(item1) == "Item('Смартфон', 10000, 20)"
+
+
+def test_str(item1):
+    assert str(item1) == 'Смартфон'
