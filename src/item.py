@@ -23,6 +23,12 @@ class Item:
         self.quantity = quantity
         Item.all.append(self)
 
+    def __repr__(self):
+        return f"Item('{self.__name}', {self.price}, {self.quantity})"
+
+    def __str__(self) -> str:
+        return self.__name
+
     @property
     def name(self):
         return self.__name
@@ -32,7 +38,7 @@ class Item:
         self.__name = value[:10] if len(value) > 10 else value
 
     @classmethod
-    def instantiate_from_csv(cls, patch):
+    def instantiate_from_csv(cls, patch,):
         cls.all.clear()
         with open(f'{ROOT_DIR + "/" + patch}', 'r', encoding='cp1251') as file:
             csv_data = csv.DictReader(file)
@@ -41,6 +47,7 @@ class Item:
                 price = float(line['price'])
                 quantity = int(line['quantity'])
                 cls(name, price, quantity)
+
     @staticmethod
     def string_to_number(string):
         return int(float(string))
