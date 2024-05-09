@@ -24,10 +24,16 @@ class Item:
         Item.all.append(self)
 
     def __repr__(self):
-        return f"Item('{self.__name}', {self.price}, {self.quantity})"
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
 
     def __str__(self) -> str:
         return self.__name
+
+    def __add__(self, other):
+        if isinstance(other, self.__class__) or issubclass(self.__class__, other.__class__):
+            return self.quantity + other.quantity
+        else:
+            raise ValueError("Складывать можно только экземпляры класса")
 
     @property
     def name(self):

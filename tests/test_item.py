@@ -3,6 +3,7 @@ import pytest
 
 from config import TEST_ITEM
 from src.item import Item
+from src.phone import Phone
 
 
 @pytest.fixture
@@ -59,3 +60,11 @@ def test_repr(item1):
 
 def test_str(item1):
     assert str(item1) == 'Смартфон'
+
+
+def test_add(product):
+    phone1 = Phone("iPhone 14", 120_000, 5, 2)
+    with pytest.raises(Exception, match='Складывать можно только экземпляры класса'):
+        product + 5
+        product + 'text'
+    assert product + phone1 == 25
