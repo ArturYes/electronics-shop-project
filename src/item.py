@@ -1,6 +1,7 @@
 import csv
 
 from config import ROOT_DIR
+from src.csv_exception import InstantiateCSVError
 
 
 class Item:
@@ -44,15 +45,22 @@ class Item:
         self.__name = value[:10] if len(value) > 10 else value
 
     @classmethod
-    def instantiate_from_csv(cls, patch,):
+    def instantiate_from_csv(cls, patch=''):
         cls.all.clear()
-        with open(f'{ROOT_DIR + "/" + patch}', 'r', encoding='cp1251') as file:
-            csv_data = csv.DictReader(file)
-            for line in csv_data:
-                name = line['name']
-                price = float(line['price'])
-                quantity = int(line['quantity'])
-                cls(name, price, quantity)
+        try:
+            with open(f'{ROOT_DIR + "/" + patch}', 'r', encoding='cp1251') as file:
+                csv_data = csv.DictReader(file)
+                for line in csv_data:
+                    try:
+                        name = line['name']
+                        price = float(line['price'])
+                        quantity = int(line['quantity'])
+                        cls(name, price, quantity)
+                    except KeyError:
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл item.csv")
+
 
     @staticmethod
     def string_to_number(string):

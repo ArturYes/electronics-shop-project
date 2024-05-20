@@ -2,6 +2,7 @@
 import pytest
 
 from config import TEST_ITEM
+from src.csv_exception import InstantiateCSVError
 from src.item import Item
 from src.phone import Phone
 
@@ -68,3 +69,15 @@ def test_add(product):
         product + 5
         product + 'text'
     assert product + phone1 == 25
+
+
+def test_instantiate_from_csv_not_found():
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv('test.csv')
+        Item.instantiate_from_csv('')
+
+
+def test_instantiate_from_csv_defect():
+    with pytest.raises(InstantiateCSVError):
+        Item.instantiate_from_csv('src/fake.csv')
+
